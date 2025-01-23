@@ -1,0 +1,24 @@
+if (jugador.direccionJugador == 1)
+                {
+                    if (currentTime - lastFrameTime > 100) // Cambiar frame cada 100ms
+                    {
+                        currentFrame = (currentFrame + 1) % 3;
+                        lastFrameTime = currentTime;
+                    }
+                    irudiaMugitu(geldik_esk[currentFrame], jugador.x, jugador.y); // Jugador mirando a la derecha
+                    irudiakMarraztu(geldik_esk[currentFrame]);
+                }
+                else if (jugador.direccionJugador == -1)
+                {
+                    if (currentTime - lastFrameTime > 100) // Cambiar frame cada 100ms
+                    {
+                        currentFrame = (currentFrame + 1) % 3;
+                        lastFrameTime = currentTime;
+                    }
+                    irudiaMugitu(geldik_ezk[currentFrame], jugador.x, jugador.y); // Jugador mirando a la izquierda
+                    irudiakMarraztu(geldik_ezk[currentFrame]);
+                }
+
+
+
+                

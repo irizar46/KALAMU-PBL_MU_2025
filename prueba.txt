@@ -1,0 +1,198 @@
+Listado de rutas de carpetas
+El número de serie del volumen es 509C-C367
+C:.
+¦   .gitignore
+¦   .vsls.json
+¦   prueba.txt
+¦   
++---.vscode
+¦       c_cpp_properties.json
+¦       launch.json
+¦       settings.json
+¦       tasks.json
+¦       
++---02simpleGame
+¦   ¦   main.c
+¦   ¦   ourTypes.h
+¦   ¦   
+¦   +---Debug
+¦   ¦       .gitignore
+¦   ¦       02simpleGame.ilk
+¦   ¦       ebentoak.obj
+¦   ¦       game02.obj
+¦   ¦       graphics.obj
+¦   ¦       imagen.obj
+¦   ¦       main.obj
+¦   ¦       soinua.obj
+¦   ¦       text.obj
+¦   ¦       vc140.pdb
+¦   ¦       
+¦   +---lib
+¦           game02.c
+¦           game02.h
+¦           
++---Debug
+¦   ¦   02simpleGame.exe
+¦   ¦   02simpleGame.pdb
+¦   ¦   OpenSans-Regular.ttf
+¦   ¦   SDL2.dll
+¦   ¦   SDL2_image.dll
+¦   ¦   SDL2_mixer.dll
+¦   ¦   SDL2_ttf.dll
+¦   ¦   
+¦   +---img
+¦   ¦       background.bmp
+¦   ¦       gameOver.bmp
+¦   ¦       hexagono.bmp
+¦   ¦       invader.bmp
+¦   ¦       
+¦   +---sound
+¦           128GBVHR_01.wav
+¦           128NIGHT_01.wav
+¦           132TRANCE_02.wav
+¦           beat.wav
+¦           BugleCall.wav
+¦           terminator.wav
+¦           
++---sdl2
+¦   +---include
+¦   ¦       begin_code.h
+¦   ¦       close_code.h
+¦   ¦       SDL.h
+¦   ¦       SDL_assert.h
+¦   ¦       SDL_atomic.h
+¦   ¦       SDL_audio.h
+¦   ¦       SDL_bits.h
+¦   ¦       SDL_blendmode.h
+¦   ¦       SDL_clipboard.h
+¦   ¦       SDL_config.h
+¦   ¦       SDL_cpuinfo.h
+¦   ¦       SDL_egl.h
+¦   ¦       SDL_endian.h
+¦   ¦       SDL_error.h
+¦   ¦       SDL_events.h
+¦   ¦       SDL_filesystem.h
+¦   ¦       SDL_gamecontroller.h
+¦   ¦       SDL_gesture.h
+¦   ¦       SDL_guid.h
+¦   ¦       SDL_haptic.h
+¦   ¦       SDL_hidapi.h
+¦   ¦       SDL_hints.h
+¦   ¦       SDL_joystick.h
+¦   ¦       SDL_keyboard.h
+¦   ¦       SDL_keycode.h
+¦   ¦       SDL_loadso.h
+¦   ¦       SDL_locale.h
+¦   ¦       SDL_log.h
+¦   ¦       SDL_main.h
+¦   ¦       SDL_messagebox.h
+¦   ¦       SDL_metal.h
+¦   ¦       SDL_misc.h
+¦   ¦       SDL_mouse.h
+¦   ¦       SDL_mutex.h
+¦   ¦       SDL_name.h
+¦   ¦       SDL_opengl.h
+¦   ¦       SDL_opengles.h
+¦   ¦       SDL_opengles2.h
+¦   ¦       SDL_opengles2_gl2.h
+¦   ¦       SDL_opengles2_gl2ext.h
+¦   ¦       SDL_opengles2_gl2platform.h
+¦   ¦       SDL_opengles2_khrplatform.h
+¦   ¦       SDL_opengl_glext.h
+¦   ¦       SDL_pixels.h
+¦   ¦       SDL_platform.h
+¦   ¦       SDL_power.h
+¦   ¦       SDL_quit.h
+¦   ¦       SDL_rect.h
+¦   ¦       SDL_render.h
+¦   ¦       SDL_revision.h
+¦   ¦       SDL_rwops.h
+¦   ¦       SDL_scancode.h
+¦   ¦       SDL_sensor.h
+¦   ¦       SDL_shape.h
+¦   ¦       SDL_stdinc.h
+¦   ¦       SDL_surface.h
+¦   ¦       SDL_system.h
+¦   ¦       SDL_syswm.h
+¦   ¦       SDL_test.h
+¦   ¦       SDL_test_assert.h
+¦   ¦       SDL_test_common.h
+¦   ¦       SDL_test_compare.h
+¦   ¦       SDL_test_crc32.h
+¦   ¦       SDL_test_font.h
+¦   ¦       SDL_test_fuzzer.h
+¦   ¦       SDL_test_harness.h
+¦   ¦       SDL_test_images.h
+¦   ¦       SDL_test_log.h
+¦   ¦       SDL_test_md5.h
+¦   ¦       SDL_test_memory.h
+¦   ¦       SDL_test_random.h
+¦   ¦       SDL_thread.h
+¦   ¦       SDL_timer.h
+¦   ¦       SDL_touch.h
+¦   ¦       SDL_types.h
+¦   ¦       SDL_version.h
+¦   ¦       SDL_video.h
+¦   ¦       SDL_vulkan.h
+¦   ¦       
+¦   +---libs
+¦           SDL2.dll
+¦           SDL2.lib
+¦           SDL2main.lib
+¦           SDL2test.lib
+¦           
++---sdl2image
+¦   +---include
+¦   ¦       SDL_image.h
+¦   ¦       
+¦   +---libs
+¦           libavif-16.dll
+¦           libtiff-5.dll
+¦           libwebp-7.dll
+¦           libwebpdemux-2.dll
+¦           LICENSE.avif.txt
+¦           LICENSE.dav1d.txt
+¦           LICENSE.tiff.txt
+¦           LICENSE.webp.txt
+¦           SDL2_image.dll
+¦           SDL2_image.lib
+¦           
++---sdl2mixer
+¦   +---include
+¦   ¦       SDL_mixer.h
+¦   ¦       
+¦   +---libs
+¦           libmodplug-1.dll
+¦           libogg-0.dll
+¦           libopus-0.dll
+¦           libopusfile-0.dll
+¦           LICENSE.modplug.txt
+¦           LICENSE.ogg-vorbis.txt
+¦           LICENSE.opus.txt
+¦           LICENSE.opusfile.txt
+¦           SDL2_mixer.dll
+¦           SDL2_mixer.lib
+¦           
++---sdl2ttf
+¦   +---include
+¦   ¦       SDL_ttf.h
+¦   ¦       
+¦   +---libs
+¦           LICENSE.freetype.txt
+¦           LICENSE.harfbuzz.txt
+¦           LICENSE.zlib.txt
+¦           SDL2_ttf.dll
+¦           SDL2_ttf.lib
+¦           
++---simpleSdlWrapper
+        ebentoak.c
+        ebentoak.h
+        graphics.c
+        graphics.h
+        imagen.c
+        imagen.h
+        soinua.c
+        soinua.h
+        text.c
+        text.h
+        

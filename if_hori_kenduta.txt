@@ -1,0 +1,116 @@
+void eguneratuJugador(Player *jugador, Plataforma plataformas[], int numPlataformas, Uint32 deltaTime, int *offsetY,
+                      Erlazioa *erlazioa)
+{
+    int i;
+    int sobrePlataforma = 0;
+
+    // Aplicar movimiento vertical por la gravedad
+    if (!jugador->enSuelo)
+    {
+        jugador->velY += GRAVITY;    // Aumentar la velocidad de caída debido a la gravedad
+        jugador->y += jugador->velY; // Actualizar la posición en el eje Y
+
+        // Mantener la velocidad horizontal del salto sin cambiarla en el aire
+        if (jugador->direccionSalto != 0) // Solo mover horizontalmente si se está saltando
+        {
+            jugador->x += jugador->velX; // Aplicamos el movimiento horizontal determinado por la dirección del salto
+        }
+    }
+
+    for (i = 0; i < erlazioa->zenb; i++) // erlazioa->zenb = numPlataformas (plataforma totalen kopurua)
+    {
+        Plataforma plataforma = erlazioa->plataformas[i];
+
+        // eskuineko errebote
+
+        if (jugador->x + PERTSONAI_ZABALERA > plataforma.x && jugador->x < plataforma.x &&
+            jugador->y < plataforma.y + platformTamaina && jugador->y + PERTSONAI_ALTUERA > plataforma.y)
+        {
+
+            if (!jugador->enSuelo)
+            {
+                jugador->velX = -jugador->velX;
+                jugador->velX = (int)(jugador->velX * 0.6f);
+            }
+            jugador->x = plataforma.x - PERTSONAI_ZABALERA - 2;
+        }
+
+        // ezkerreko errebote
+
+        else if (jugador->x < plataforma.x + platformTamaina && jugador->x + PERTSONAI_ZABALERA > plataforma.x &&
+                 jugador->y < plataforma.y + platformTamaina && jugador->y + PERTSONAI_ALTUERA > plataforma.y)
+        {
+
+                        if (!jugador->enSuelo)
+            {
+                jugador->velX = -jugador->velX;
+                jugador->velX = (int)(jugador->velX * 0.6);
+            }
+            jugador->x = plataforma.x + PERTSONAI_ZABALERA + 2;
+        }
+
+        // plataforma gainean salto
+
+        else if (jugador->y + PERTSONAI_ALTUERA <= plataforma.y &&
+                 jugador->y + PERTSONAI_ALTUERA + jugador->velY > plataforma.y &&
+                 jugador->x + PERTSONAI_ZABALERA + 4 > plataforma.x && jugador->x < plataforma.x + platformTamaina - 4)
+        {
+            // Colocamos al jugador justo encima de la plataforma
+            jugador->y = plataforma.y - PERTSONAI_ALTUERA; // Colocar al jugador en la parte superior de la plataforma
+            jugador->velY = 0;                             // Detener la caída
+            jugador->enSuelo = 1;
+        }
+        // plataforma azpian salto
+
+        else if (jugador->y >= plataforma.y + platformTamaina &&
+                 jugador->y + jugador->velY < plataforma.y + platformTamaina &&
+                 jugador->x + PERTSONAI_ZABALERA > plataforma.x && jugador->x < plataforma.x + platformTamaina)
+        {
+            jugador->velY = 0;
+            jugador->velX = (int)(jugador->velX * 0.8f);
+
+            printf("%d ensuelo? %d velY? %d sobreplat?\n\n\n", jugador->enSuelo, jugador->velY, sobrePlataforma);
+        }
+        if (jugador->y >= plataforma.y + platformTamaina &&
+            jugador->y + jugador->velY < plataforma.y + platformTamaina &&
+            jugador->x + PERTSONAI_ZABALERA > plataforma.x && jugador->x < plataforma.x + platformTamaina)
+        {
+            jugador->velY = 0;
+            jugador->velX = (int)(jugador->velX * 0.8f);
+        }
+    }
+
+    // Limitar el movimiento del jugador dentro de los bordes de la pantalla
+    if (jugador->x < 0) // Límite izquierdo
+    {
+        jugador->x = 0;
+
+        if (!jugador->enSuelo) // rebote
+        {
+            jugador->velX = -jugador->velX; // Invertir la dirección horizontal
+            jugador->velX = (int)(jugador->velX * 0.6f);
+        } // Reducir ligeramente la velocidad horizontal (simular pérdida de
+    }
+    if (jugador->x > SCREEN_WIDTH - PERTSONAI_ZABALERA) // Límite derecho (50 es el ancho del jugador)
+    {
+        jugador->x = SCREEN_WIDTH - PERTSONAI_ZABALERA;
+
+        if (!jugador->enSuelo) // rebote
+        {
+            jugador->velX = -jugador->velX; // Invertir la dirección horizontal
+            jugador->velX = (int)(jugador->velX * 0.6f);
+        }
+    }
+
+    // Actualizar offsetY si el jugador toca los límites superior o inferior de la pantalla
+    if (jugador->y + PERTSONAI_ALTUERA <= 0) // Límite superior
+    {
+        *offsetY += 1;
+        jugador->y = SCREEN_HEIGHT - PERTSONAI_ALTUERA;
+    }
+    else if (jugador->y + PERTSONAI_ALTUERA >= SCREEN_HEIGHT) // Límite inferior
+    {
+        *offsetY -= 1;
+        jugador->y = 0 - PERTSONAI_ALTUERA + 1;
+    }
+}

@@ -1,0 +1,11 @@
+// Dibuja el personaje estático con animación
+        if (currentTime - lastFrameTime > 100) // Cambiar frame cada 100ms
+        {
+            currentFrame = (currentFrame + 1) % 6;
+            lastFrameTime = currentTime;
+        }
+
+        irudiaMugitu(bokadilloa, 280, 680);          // Posición fija del personaje estático
+        irudiaMugitu(Gipsy[currentFrame], 180, 845); // Posición fija del personaje estático
+        irudiakMarraztu(Gipsy[currentFrame]);
+        irudiakMarraztu(bokadilloa);
