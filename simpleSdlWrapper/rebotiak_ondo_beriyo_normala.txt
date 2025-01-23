@@ -1,0 +1,219 @@
+#define ONGI_ETORRI_MEZUA "Sakatu return hasteko..."
+#define JOKOA_SOUND "./sound/132TRANCE_02.wav"
+#define PLAYER_ESK "./img/Pertsonai (1).png"
+#define PLAYER_EZK "./img/Pertsonai_ezker.png"
+#define BACKGROUND_IMAGE "./img/red-poster-cristiano-ronaldo-hd-4k-qung8px34lq7o2f8.jpg"
+#define PLATFORM_IMAGE "./img/terrain_.png"
+#define GRAVITY 1 // Gravedad que afecta al jugador
+#define MAX_JUMP_FORCE 25
+#define TIME_SCALE 0.6
+
+#include "lib/game02.h"
+#include "ebentoak.h"
+#include "graphics.h"
+#include "imagen.h"
+#include "ourTypes.h"
+#include "soinua.h"
+#include "text.h"
+#include <mapa.h>
+#include <stdio.h>
+
+EGOERA jokatu(void)
+{
+    EGOERA egoera = JOLASTEN;
+    SDL_Event ebentu;
+    Player jugador;
+    int backgroundId, plataformaId, jugador_ezk;
+    Uint32 lastTime = SDL_GetTicks(); // Guardar el tiempo inicial
+
+    // Inicialización de elementos
+    jugador.x = SCREEN_WIDTH / 2;
+    jugador.y = SCREEN_HEIGHT - 200; // Suponiendo que la altura del jugador es 50px
+
+    jugador.velY = 0;
+    jugador.enSuelo = 1;
+    jugador.cargandoSalto = 0;
+    jugador.direccionJugador = 1; // Jugador mirando a la derecha
+    backgroundId = irudiaKargatu(BACKGROUND_IMAGE);
+    jugador.id = irudiaKargatu(PLAYER_ESK);
+    jugador_ezk = irudiaKargatu(PLAYER_EZK);
+    plataformaId = irudiaKargatu(PLATFORM_IMAGE);
+
+    int mapa[FILAS][COLUMNAS];
+    cargarMapa(mapa);
+    // Bucle principal del juego
+    while (egoera == JOLASTEN)
+    {
+        SDL_Delay(22); // Control de frames
+        Uint32 currentTime = SDL_GetTicks();
+        Uint32 deltaTime = currentTime - lastTime; // Tiempo transcurrido desde el último frame
+        lastTime = currentTime;
+
+        while (SDL_PollEvent(&ebentu))
+        {
+            prozesatuEbentuak(&ebentu, &jugador, &egoera);
+        }
+
+        pantailaGarbitu();
+        eguneratuJugador(&jugador, deltaTime);
+
+        irudiakMarraztu(backgroundId);
+        dibujarMapa(mapa, plataformaId);
+
+        if (jugador.direccionJugador == 1)
+        {
+            irudiaMugitu(jugador.id, jugador.x, jugador.y); // Jugador mirando a la derecha
+            irudiakMarraztu(jugador.id);
+        }
+        else if (jugador.direccionJugador == -1)
+        {
+            irudiaMugitu(jugador_ezk, jugador.x, jugador.y); // Jugador mirando a la izquierda
+            irudiakMarraztu(jugador_ezk);
+        }
+
+        // irudiaMugitu(jugador.id, jugador.x, jugador.y); // Posicionamos al jugador en la pantalla
+
+        // irudiakMarraztu(jugador.id);
+
+        pantailaBerriztu();
+    }
+
+    // Finalizar el juego
+    jokoaBukatu(&jugador, backgroundId);
+
+    return egoera;
+}
+
+void prozesatuEbentuak(SDL_Event *ebentu, Player *jugador, EGOERA *egoera)
+{
+    const int playerSpeed = 5;
+
+    if (ebentu->type == SDL_QUIT)
+    {
+        *egoera = JOKUA_AMAITU;
+    }
+    else if (ebentu->type == SDL_KEYDOWN)
+    {
+        switch (ebentu->key.keysym.sym)
+        {
+        case SDLK_x:
+            *egoera = JOKUA_AMAITU;
+            break;
+
+        // Movimiento solo permitido si no se está cargando un salto
+        case SDLK_LEFT:
+            // Si el espacio está presionado, no mueves el personaje
+            if (!jugador->cargandoSalto)
+            { // Solo si no está cargando el salto
+                jugador->x -= playerSpeed;
+            }
+            jugador->direccionSalto = -1;
+            jugador->direccionJugador = -1; // Cambiar la dirección del personaje (mirando a la izquierda)
+            break;
+        case SDLK_RIGHT:
+            // Si el espacio está presionado, no mueves el personaje
+            if (!jugador->cargandoSalto)
+            { // Solo si no está cargando el salto
+                jugador->x += playerSpeed;
+            }
+            jugador->direccionSalto = 1;
+            jugador->direccionJugador = 1; // Cambiar la dirección del personaje (mirando a la derecha)
+            break;
+
+        case SDLK_SPACE:
+            if (jugador->enSuelo && !jugador->cargandoSalto) // Solo si está en el suelo y no está cargando el salto
+            {
+                jugador->cargandoSalto = 1;            // Comienza a cargar el salto
+                jugador->inicioCarga = SDL_GetTicks(); // Guardamos el tiempo de inicio de carga
+            }
+            break;
+        }
+    }
+    else if (ebentu->type == SDL_KEYUP)
+    {
+        if (ebentu->key.keysym.sym == SDLK_SPACE)
+        {
+            // Si el jugador suelta la tecla de salto, se aplica el salto
+            if (jugador->enSuelo && jugador->cargandoSalto)
+            {
+                Uint32 tiempoCargado = SDL_GetTicks() - jugador->inicioCarga; // Calculamos el tiempo de carga
+
+                // Aplicar salto proporcionalmente según el tiempo cargado
+                jugador->velY = (int)(-roundf((tiempoCargado / 600.0f) * MAX_JUMP_FORCE));
+                if (jugador->velY < -MAX_JUMP_FORCE)
+                {
+                    jugador->velY = -MAX_JUMP_FORCE; // Limitar la fuerza vertical
+                }
+
+                // Componente horizontal del salto
+                jugador->velX = jugador->direccionSalto * abs(jugador->velY) / 2; // Proporcional a la fuerza del salto
+
+                jugador->cargandoSalto = 0; // Deja de cargar el salto
+                jugador->enSuelo = 0;       // El jugador ya no está en el suelo
+            }
+        }
+        else if (ebentu->key.keysym.sym == SDLK_LEFT || ebentu->key.keysym.sym == SDLK_RIGHT)
+        {
+            jugador->direccionSalto = 0; // Detener el movimiento horizontal al soltar "a" o "d"
+        }
+    }
+}
+
+void eguneratuJugador(Player *jugador, Uint32 deltaTime)
+{
+    // Aplicar movimiento vertical por la gravedad
+    if (!jugador->enSuelo)
+    {
+        jugador->velY += GRAVITY;    // Aumentar la velocidad de caída debido a la gravedad
+        jugador->y += jugador->velY; // Actualizar la posición en el eje Y
+        jugador->x += jugador->velX; // Mantener el movimiento constante en el eje X
+    }
+
+    // Lógica para detectar si el jugador ha tocado el suelo
+    if (jugador->y >= SCREEN_HEIGHT - 200) // 50 es la altura del jugador
+    {
+        jugador->y = SCREEN_HEIGHT - 200; // Mantener al jugador en el suelo
+        jugador->velY = 0;                // Detener la caída
+        jugador->velX = 0;                // Detener el movimiento horizontal
+        jugador->enSuelo = 1;             // El jugador ahora está en el suelo
+    }
+    // Limitar el movimiento del jugador dentro de los bordes de la pantalla
+    if (jugador->x < 0) // Límite izquierdo
+    {
+        jugador->x = 0;
+
+        jugador->velX = -jugador->velX; // Invertir la dirección horizontal
+        jugador->velX =
+            (int)(jugador->velX * 0.8f); // Reducir ligeramente la velocidad horizontal (simular pérdida de energía)
+        jugador->velY = (int)(jugador->velY * 0.8f); // Detener el movimiento horizontal al chocar con el borde
+    }
+    if (jugador->x > SCREEN_WIDTH - 50) // Límite derecho (50 es el ancho del jugador)
+    {
+        jugador->x = SCREEN_WIDTH - 50;
+
+        jugador->velX = -jugador->velX; // Invertir la dirección horizontal
+        jugador->velX =
+            (int)(jugador->velX * 0.8f); // Reducir ligeramente la velocidad horizontal (simular pérdida de energía)
+        jugador->velY = (int)(jugador->velY * 0.8f); // Detener el movimiento horizontal al chocar con el borde
+    }
+}
+
+void jokoaAurkeztu(void)
+{
+    pantailaGarbitu();
+    textuaIdatzi((SCREEN_WIDTH / 2) - 100, (SCREEN_HEIGHT / 2) - 20, ONGI_ETORRI_MEZUA);
+    pantailaBerriztu();
+    while (ebentuaJasoGertatuBada() != TECLA_RETURN)
+    {
+        // Esperar a que el usuario presione "Return"
+    }
+}
+
+void jokoaBukatu(Player *jugador, int backgroundId)
+{
+    irudiaKendu(jugador->id);
+    irudiaKendu(backgroundId);
+    sgItxi(); // Cerrar la ventana SDL
+}
+
+#include "mapa.h" // Archivo que contendrá la declaración del mapa
